@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.distributions import Categorical
-
+import sys
 #Hyperparameters
 learning_rate = 0.0002
 gamma         = 0.98
@@ -42,15 +42,20 @@ def main():
     score = 0.0
     print_interval = 20
     
-    
     for n_epi in range(10000):
         s, _ = env.reset()
+        print(s)
+
         done = False
         
         while not done: # CartPole-v1 forced to terminates at 500 step.
             prob = pi(torch.from_numpy(s).float())
             m = Categorical(prob)
             a = m.sample()
+            print(prob)
+            print(m)
+            print(a)
+            sys.exit()
             s_prime, r, done, truncated, info = env.step(a.item())
             pi.put_data((r,prob[a]))
             s = s_prime
