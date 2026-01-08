@@ -1,3 +1,6 @@
+# DQN review
+## Full code
+``` Python
 import gym
 import collections
 import random
@@ -44,7 +47,7 @@ class Qnet(nn.Module):
         super(Qnet, self).__init__()
         self.fc1 = nn.Linear(4, 128)
         self.fc2 = nn.Linear(128, 128)
-        self.fc3 = nn.Linear(128, 2)# 왜 2임?
+        self.fc3 = nn.Linear(128, 2)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
@@ -113,3 +116,64 @@ def main():
 
 if __name__ == '__main__':
     main()
+```
+## Pre-Concept
+**Q function**: 가치를 평가해주는 함수, $Q(s,a)$로 나타냄 (어떤 state에서 action을 할 경우 그 action의 가치를 평가해줌)
+
+Contributions(?) 기존 Q learning을 NN으로 발전시킨 꼴
+
+## Qnet
+```Python
+class Qnet(nn.Module):
+    def __init__(self):
+        super(Qnet, self).__init__()
+        self.fc1 = nn.Linear(4, 128)
+        self.fc2 = nn.Linear(128, 128)
+        self.fc3 = nn.Linear(128, 2)
+
+    def forward(self, x):
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+      
+    def sample_action(self, obs, epsilon):
+        out = self.forward(obs)
+        coin = random.random()
+        if coin < epsilon:
+            return random.randint(0,1)
+        else : 
+            return out.argmax().item()         
+```
+### Initialization & Forward
+```Py
+    def __init__(self):
+        super(Qnet, self).__init__()
+        self.fc1 = nn.Linear(4, 128)
+        self.fc2 = nn.Linear(128, 128)
+        self.fc3 = nn.Linear(128, 2)
+
+    def forward(self, x):
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+```
+**input:** state (REINFORCE와 동일한 state vector)  
+**output:** 가치 평가가 담긴 vector
+
+Qnet은 기존 Q function을 network로 만든 모델, state를 입력받고 left, right action에 대한 평가를 출력함
+
+### Sample action
+```py
+    def sample_action(self, obs, epsilon):
+        out = self.forward(obs)
+        coin = random.random()
+        if coin < epsilon:
+            return random.randint(0,1)
+        else : 
+            return out.argmax().item()         
+```
+epsilone을 활용해서 stochastic하게 action을 수행하도록 유도함.  
+main에서는 0.01~0.08 사이에서 epsilon 값을 받고 epsilon 보다 coin이 작으면 랜덤행동을 수행하도록 action sampling 진행.
+
