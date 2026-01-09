@@ -267,7 +267,7 @@ sample된 state를 target에 적용하고(`q_out`), sample된 state의 다음 ti
 
 이때 target은 max()를 활용해 최대 보상을 가져와서 TD학습 방식 적용  
 
-loss는 L1 norm을 활용함, `max_q_prime`에서 done_mask를 활용해 실패하는 case는 masking해서 loss계산
+loss는 L1 norm을 활용함, `max_q_prime`에서 done_mask를 활용해 종료하는 state는 masking해서 loss계산
 
   
 ## main
@@ -338,3 +338,6 @@ Qnet과 target network를 선언하고 초기 가중치는 동일하게 설정�
 
 `ReplayBuffer`에 2000개 이상 쌓일때부터 train 수행
 일정 주기마다 q_target의 NN model update
+
+Output
+![alt text](../images/dqn.png)

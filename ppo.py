@@ -67,7 +67,7 @@ class PPO(nn.Module):
             advantage_lst = []
             advantage = 0.0
             for delta_t in delta[::-1]:
-                advantage = gamma * lmbda * advantage + delta_t[0]
+                advantage = gamma * lmbda * advantage + delta_t[0] #GAE 계산부분
                 advantage_lst.append([advantage])
             advantage_lst.reverse()
             advantage = torch.tensor(advantage_lst, dtype=torch.float)
