@@ -7,6 +7,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
+import sys
+
 #Hyperparameters
 learning_rate = 0.0005
 gamma         = 0.98
@@ -67,6 +69,16 @@ def train(q, q_target, memory, optimizer):
         q_out = q(s)
         q_a = q_out.gather(1,a)
         max_q_prime = q_target(s_prime).max(1)[0].unsqueeze(1)
+        
+        # print(done_mask)
+        # print(q_out)
+        # print(q_a)
+        # out = q_target(s_prime)
+        # print("q target output:")
+        # print(out)
+        # print(out.max(1)[0])
+        # sys.exit()
+        
         target = r + gamma * max_q_prime * done_mask
         loss = F.smooth_l1_loss(q_a, target)
         
