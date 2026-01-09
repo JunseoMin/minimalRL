@@ -13,13 +13,15 @@ Actor-Critic 구조에서 활용되는 학습 방법론
 
 PPO는 위 식에서 처럼 ratio가 1-$ \epsilon$, 1+$\epsilon$을 넘어서면 clip을 수행함
 
-$$L(\theta) =
+$$
+L(\theta) =
 
 \begin{cases}
 r(\theta)A_t & \text{if } r(\theta) \le 1+\epsilon \\
 
 (1+\epsilon)A_t & \text{if } r(\theta) > 1+\epsilon
-\end{cases}$$
+\end{cases}
+$$
 
 로 정리해서 다시 나타낼 수 있음  
 2번짜 $L(\theta)$의 경우 식에 $\theta$가 없는 상수 term이 되어서 가중치 갱신 수행 안됨
